@@ -114,9 +114,9 @@ class AbstractTest(unittest.TestCase):
                     secondary_vcr.write_cassette()
 
 
-class KoscheiBackendSessionMock(KoscheiBackendSession):
-    def __init__(self):
-        super(KoscheiBackendSessionMock, self).__init__()
+class KoscheiMockSessionMixin(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.koji_mock = KojiMock()
         self.sec_koji_mock = KojiMock()
         self.repo_cache_mock = RepoCacheMock()
@@ -137,6 +137,10 @@ class KoscheiBackendSessionMock(KoscheiBackendSession):
     @property
     def build_from_repo_id(self):
         return self.build_from_repo_id_override
+
+
+class KoscheiBackendSessionMock(KoscheiMockSessionMixin, KoscheiBackendSession):
+    pass
 
 
 class DBTest(AbstractTest):
